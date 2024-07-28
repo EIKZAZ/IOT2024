@@ -22,3 +22,23 @@ class Student(Base):
     sex = Column(String, index=True)
     age = Column(Integer, index=True)
 
+class Menu(Base):
+    __tablename__ = 'menu'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    amount = Column(Integer, index=True)
+    descript = Column(String, index=True)
+    price = Column(Integer, index=True)
+    detail = Column(String, index=True)
+
+class Order(Base):
+    __tablename__ = 'order'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    amount = Column(Integer, index=True)
+    descript = Column(String, index=True)
+    price = Column(Integer, index=True)
+    
+

@@ -31,6 +31,7 @@ app.add_middleware(
 
 # https://fastapi.tiangolo.com/tutorial/sql-databases/#crud-utils
 
+#BOOKS
 @router_v1.get('/books')
 async def get_books(db: Session = Depends(get_db)):
     return db.query(models.Book).all()
@@ -57,6 +58,7 @@ async def create_book(book: dict, response: Response, db: Session = Depends(get_
 # async def delete_book(book_id: int, db: Session = Depends(get_db)):
 #     pass
 
+#STUDENTS
 @router_v1.get('/student')
 async def get_student(db: Session = Depends(get_db)):
     return db.query(models.Student).all()
@@ -74,6 +76,43 @@ async def create_student(student: dict, response: Response, db: Session = Depend
     db.refresh(newstudent)
     response.status_code = 201
     return newstudent
+
+#MENUS
+@router_v1.get('/menu')
+async def get_menu(db: Session = Depends(get_db)):
+    return db.query(models.Menu).all()
+
+@router_v1.get('/menu/{menu_id}')
+async def get_menu(menu_id: int, db: Session = Depends(get_db)):
+    return db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+
+@router_v1.post('/menu')
+async def create_menu(menu: dict, response: Response, db: Session = Depends(get_db)):
+    # TODO: Add validation
+    newmenu = models.Menu(name=menu['name'], amount=menu['amount'], descript=menu['note'], detail=menu['detail'] ,price=menu['price'])
+    db.add(newmenu)
+    db.commit()
+    db.refresh(newmenu)
+    response.status_code = 201
+    return newmenu
+
+#ORDERS
+@router_v1.get('/order')
+async def get_order(db: Session = Depends(get_db)):
+    return db.query(models.Order).all()
+
+@router_v1.get('/order/{order_id}')
+async def get_order(order_id: int, db: Session = Depends(get_db)):
+    return db.query(models.Order).filter(models.Order.id == order_id).first()
+
+@router_v1.post('/order')
+async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
+    neworder = models.Order(name=order['name'], amount=order['quantity'], descript=order['note'], price=order['price'])
+    db.add(neworder)
+    db.commit()
+    db.refresh(neworder)
+    response.status_code = 201
+    return neworder
 
 app.include_router(router_v1)
 
