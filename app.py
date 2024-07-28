@@ -89,7 +89,7 @@ async def get_menu(menu_id: int, db: Session = Depends(get_db)):
 @router_v1.post('/menu')
 async def create_menu(menu: dict, response: Response, db: Session = Depends(get_db)):
     # TODO: Add validation
-    newmenu = models.Menu(name=menu['name'], amount=menu['amount'], descript=menu['note'], detail=menu['detail'] ,price=menu['price'])
+    newmenu = models.Menu(name=menu['name'], amount=menu['amount'], descript=menu['descript'], detail=menu['detail'] ,price=menu['price'])
     db.add(newmenu)
     db.commit()
     db.refresh(newmenu)
@@ -107,7 +107,7 @@ async def get_order(order_id: int, db: Session = Depends(get_db)):
 
 @router_v1.post('/order')
 async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
-    neworder = models.Order(name=order['name'], amount=order['quantity'], descript=order['note'], price=order['price'])
+    neworder = models.Order(name=order['name'], amount=order['amount'], descript=order['descript'], price=order['price'])
     db.add(neworder)
     db.commit()
     db.refresh(neworder)
