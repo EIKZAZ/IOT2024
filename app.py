@@ -50,13 +50,22 @@ async def create_book(book: dict, response: Response, db: Session = Depends(get_
     response.status_code = 201
     return newbook
 
-# @router_v1.patch('/books/{book_id}')
-# async def update_book(book_id: int, book: dict, db: Session = Depends(get_db)):
-#     pass
+@router_v1.patch('/books/{book_id}')
+async def update_book(book_id: int, book: dict, db: Session = Depends(get_db)):
+    db_item = db.query(models.Book).filter(models.Book.id == book_id).first()
+    for key, value in book.items():
+            setattr(db_item, key, value)
+    db.commit()
+    db.refresh(db_item)
+    # response.status_code = 201
+    return db_item
 
-# @router_v1.delete('/books/{book_id}')
-# async def delete_book(book_id: int, db: Session = Depends(get_db)):
-#     pass
+@router_v1.delete('/books/{book_id}')
+async def delete_book(book_id: int,db: Session = Depends(get_db)):
+    db_item = db.query(models.Book).filter(models.Book.id == book_id).first()
+    db.delete(db_item)
+    db.commit()
+    return "Delete"
 
 #STUDENTS
 @router_v1.get('/student')
@@ -96,6 +105,22 @@ async def create_menu(menu: dict, response: Response, db: Session = Depends(get_
     response.status_code = 201
     return newmenu
 
+@router_v1.patch('/menu/{menu_id}')
+async def update_menu(menu_id: int, menu: dict, db: Session = Depends(get_db)):
+    db_item = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+    for key, value in menu.items():
+            setattr(db_item, key, value)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+@router_v1.delete('/menu/{menu_id}')
+async def delete_menu(menu_id: int, db: Session = Depends(get_db)):
+    db_item = db.query(models.Menu).filter(models.Menu.id == menu_id).first()
+    db.delete(db_item)
+    db.commit()
+    return "Delete"
+
 #ORDERS
 @router_v1.get('/order')
 async def get_order(db: Session = Depends(get_db)):
@@ -113,6 +138,22 @@ async def create_order(order: dict, response: Response, db: Session = Depends(ge
     db.refresh(neworder)
     response.status_code = 201
     return neworder
+
+@router_v1.patch('/order/{order_id}')
+async def update_order(order_id: int, order: dict, db: Session = Depends(get_db)):
+    db_item = db.query(models.Order).filter(models.Order.id == order_id).first()
+    for key, value in order.items():
+            setattr(db_item, key, value)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+@router_v1.delete('/order/{order_id}')
+async def delete_order(order_id: int, db: Session = Depends(get_db)):
+    db_item = db.query(models.Order).filter(models.Order.id == order_id).first()
+    db.delete(db_item)
+    db.commit()
+    return "Delete successfully"
 
 app.include_router(router_v1)
 
