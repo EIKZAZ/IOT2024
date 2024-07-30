@@ -43,7 +43,7 @@ async def get_book(book_id: int, db: Session = Depends(get_db)):
 @router_v1.post('/books')
 async def create_book(book: dict, response: Response, db: Session = Depends(get_db)):
     # TODO: Add validation
-    newbook = models.Book(title=book['title'], author=book['author'], year=book['year'], is_published=book['is_published'])
+    newbook = models.Book(title=book['title'], author=book['author'], year=book['year'], is_published=book['is_published'], detail=book['detail'], recap=book['recap'], category=book['category'])
     db.add(newbook)
     db.commit()
     db.refresh(newbook)
@@ -153,7 +153,7 @@ async def delete_order(order_id: int, db: Session = Depends(get_db)):
     db_item = db.query(models.Order).filter(models.Order.id == order_id).first()
     db.delete(db_item)
     db.commit()
-    return "Delete successfully"
+    return "Delete"
 
 app.include_router(router_v1)
 
